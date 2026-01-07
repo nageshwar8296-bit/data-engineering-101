@@ -6,6 +6,20 @@
 
 ---
 
+### View Interactive Version
+
+For a better viewing experience with interactive features and multiple color themes:
+
+**[View the Interactive Guide](https://nageshwar8296-bit.github.io/data-engineering-101/)**
+
+Features:
+- Expandable sections with smooth animations
+- Tab navigation (Tool Ecosystem / Company Examples)
+- 8 color themes — click the circle in the top-right corner to cycle through them
+- Mobile responsive design
+
+---
+
 **What's inside:** A comprehensive overview of the data engineering ecosystem — from data sources to visualization — along with real-world examples of how startups, mid-size companies, and enterprises build their data stacks.
 
 > Click on each section to expand. **Bold** tools are the most popular ones.

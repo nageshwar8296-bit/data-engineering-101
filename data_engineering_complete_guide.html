@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Engineering Complete Guide</title>
+    <style>
+        :root {
+            --primary: #06b6d4;
+            --primary-dark: #0891b2;
+            --bg-dark: #0f172a;
+            --bg-medium: #1e293b;
+            --card-bg: #334155;
+            --card-hover: #475569;
+            --border: #64748b;
+        }
+        [data-theme="blue"] {
+            --primary: #60a5fa;
+            --primary-dark: #3b82f6;
+            --bg-dark: #0f172a;
+            --bg-medium: #1e3a5f;
+            --card-bg: #2563eb20;
+            --card-hover: #3b82f640;
+            --border: #60a5fa50;
+        }
+        [data-theme="purple"] {
+            --primary: #c084fc;
+            --primary-dark: #a855f7;
+            --bg-dark: #1e1b4b;
+            --bg-medium: #2e2756;
+            --card-bg: #7c3aed20;
+            --card-hover: #8b5cf640;
+            --border: #a78bfa50;
+        }
+        [data-theme="green"] {
+            --primary: #4ade80;
+            --primary-dark: #22c55e;
+            --bg-dark: #0f1f17;
+            --bg-medium: #14532d40;
+            --card-bg: #22c55e20;
+            --card-hover: #4ade8030;
+            --border: #4ade8050;
+        }
+        [data-theme="orange"] {
+            --primary: #fb923c;
+            --primary-dark: #f97316;
+            --bg-dark: #1c1410;
+            --bg-medium: #431407;
+            --card-bg: #f9731620;
+            --card-hover: #fb923c30;
+            --border: #fdba7450;
+        }
+        [data-theme="rose"] {
+            --primary: #fb7185;
+            --primary-dark: #f43f5e;
+            --bg-dark: #1f1115;
+            --bg-medium: #4c0d19;
+            --card-bg: #f43f5e20;
+            --card-hover: #fb718530;
+            --border: #fda4af50;
+        }
+        [data-theme="pink"] {
+            --primary: #f0abfc;
+            --primary-dark: #e879f9;
+            --bg-dark: #1a1523;
+            --bg-medium: #2e1a47;
+            --card-bg: #d946ef20;
+            --card-hover: #e879f930;
+            --border: #f0abfc50;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+            color: #eee;
+            padding: 20px;
+            min-height: 100vh;
+            margin: 0;
+            transition: background 0.5s ease;
+        }
+        .color-picker {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: conic-gradient(#06b6d4, #60a5fa, #c084fc, #4ade80, #fb923c, #fb7185, #f0abfc, #06b6d4);
+            border: 3px solid #fff;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .color-picker:hover {
+            transform: scale(1.15);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .color-picker:active {
+            transform: scale(0.95);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2rem;
+            transition: color 0.5s ease;
+        }
+        .subtitle {
+            text-align: center;
+            color: #9ca3af;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Tab Styles */
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .tab-btn {
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 2px solid var(--border);
+            background: var(--card-bg);
+            color: #9ca3af;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: #fff;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #0f0f1a;
+            border-color: var(--primary);
+        }
+        .tab-btn .icon {
+            font-size: 1.3rem;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==================== TAB 1: ECOSYSTEM STYLES ==================== */
+        details {
+            background: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+        details[open] {
+            border-left-color: #10b981;
+        }
+        summary {
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        summary::-webkit-details-marker {
+            display: none;
+        }
+        summary::before {
+            content: '▶';
+            font-size: 0.8rem;
+            transition: transform 0.2s, color 0.5s ease;
+            color: var(--primary);
+        }
+        details[open] summary::before {
+            transform: rotate(90deg);
+        }
+        summary:hover {
+            background: var(--card-hover);
+            border-radius: 6px 6px 0 0;
+        }
+        .content {
+            padding: 0 20px 15px 45px;
+        }
+        .section-desc {
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            background: var(--card-hover);
+            padding: 10px 15px;
+            border-radius: 6px;
+            border-left: 3px solid var(--primary);
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+        .sub-details {
+            background: var(--card-hover);
+            border-radius: 6px;
+            margin: 8px 0;
+            border-left: 3px solid var(--primary);
+            opacity: 0.9;
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+        .sub-details summary {
+            font-size: 1rem;
+            padding: 10px 15px;
+        }
+        .sub-details summary::before {
+            color: var(--primary);
+        }
+        .sub-content {
+            padding: 0 15px 10px 35px;
+        }
+        .sub-desc {
+            color: #fcd34d;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        .tool-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .tool {
+            background: var(--card-hover);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            transition: background 0.5s ease;
+        }
+        .tool.highlight {
+            background: var(--primary);
+            color: var(--bg-dark);
+            font-weight: 600;
+            transition: background 0.5s ease;
+        }
+        .tool-desc {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        .section-number {
+            background: var(--primary);
+            color: var(--bg-dark);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            transition: background 0.5s ease;
+        }
+        .flow-arrow {
+            text-align: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 5px 0;
+            transition: color 0.5s ease;
+        }
+        .analogy {
+            background: var(--primary)15;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-top: 10px;
+            border: 1px solid var(--primary)30;
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+        }
+        .analogy::before {
+            content: '💡 ';
+        }
+
+        /* ==================== TAB 2: COMPANY STYLES ==================== */
+        .company-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+        .company-section > summary {
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .company-section > summary::before {
+            content: '▶';
+        }
+        .company-section[open] > summary::before {
+            transform: rotate(90deg);
+        }
+        .company-icon {
+            font-size: 2rem;
+        }
+        .company-info {
+            flex: 1;
+        }
+        .company-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .company-subtitle {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-top: 3px;
+        }
+        .company-content {
+            padding: 0 25px 25px 25px;
+        }
+        .company-desc {
+            background: var(--card-hover);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            border-left: 4px solid var(--primary);
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+
+        /* Company Colors */
+        .small .company-title { color: #10b981; }
+        .small .company-section { border-left: 4px solid #10b981; }
+        .small .flow-box { border-color: #10b981; }
+        
+        .mid .company-title { color: #3b82f6; }
+        .mid .company-section { border-left: 4px solid #3b82f6; }
+        .mid .flow-box { border-color: #3b82f6; }
+        
+        .large .company-title { color: #a855f7; }
+        .large .company-section { border-left: 4px solid #a855f7; }
+        .large .flow-box { border-color: #a855f7; }
+
+        /* Flow Diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 15px 0;
+            overflow-x: auto;
+        }
+        .flow-box {
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 12px 15px;
+            text-align: center;
+            min-width: 100px;
+            transition: all 0.3s ease;
+        }
+        .flow-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px var(--primary)30;
+            background: var(--primary)20;
+        }
+        .flow-box .icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        .flow-box .label {
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 3px;
+        }
+        .flow-box .tool-name {
+            font-size: 0.7rem;
+            color: #9ca3af;
+        }
+        .arrow-small {
+            color: var(--primary);
+            font-size: 1.2rem;
+            transition: color 0.5s ease;
+        }
+
+        /* Scenario Box */
+        .scenario {
+            background: var(--primary)10;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid var(--primary)40;
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+        .scenario-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.5s ease;
+        }
+        .scenario-title::before {
+            content: '📋';
+        }
+        .scenario p {
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Stack List */
+        .stack-details {
+            background: var(--card-hover);
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 3px solid var(--primary);
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+        .stack-details summary {
+            font-size: 0.95rem;
+            color: var(--primary);
+        }
+        .stack-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            padding: 10px 15px 15px 35px;
+        }
+        .stack-item {
+            background: var(--card-bg);
+            padding: 10px 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.5s ease;
+        }
+        .stack-item .step-num {
+            background: var(--primary);
+            color: var(--bg-dark);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            transition: background 0.5s ease;
+        }
+        .stack-item .step-info {
+            flex: 1;
+        }
+        .stack-item .step-label {
+            font-size: 0.7rem;
+            color: #9ca3af;
+        }
+        .stack-item .step-tool {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Comparison Table */
+        .comparison-details {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 4px solid var(--primary);
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+        .comparison-details summary {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        .comparison-table th {
+            background: var(--card-hover);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: background 0.5s ease;
+        }
+        .comparison-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            transition: border-color 0.5s ease;
+        }
+        .comparison-table tr:hover td {
+            background: var(--card-hover);
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge.green { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .badge.blue { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .badge.purple { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .tab-btn {
+                padding: 12px 15px;
+                font-size: 0.85rem;
+            }
+            .flow-diagram {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .arrow-small {
+                transform: rotate(90deg);
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="color-picker" onclick="cycleTheme()" title="Change theme"></div>
+    <div class="container">
+        <h1>🔧 Data Engineering Complete Guide</h1>
+        <p class="subtitle">Everything you need to know about data engineering tools and pipelines</p>
+
+        <!-- TAB BUTTONS -->
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="switchTab('ecosystem')">
+                <span class="icon">🗂️</span>
+                <span>Tool Ecosystem</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('companies')">
+                <span class="icon">🏢</span>
+                <span>Company Examples</span>
+            </button>
+        </div>
+
+        <!-- ==================== TAB 1: ECOSYSTEM ==================== -->
+        <div id="ecosystem" class="tab-content active">
+            
+            <p class="subtitle">Click on each section to expand. Green tools are the most popular ones.</p>
+
+            <!-- 1. Data Sources -->
+            <details>
+                <summary><span class="section-number">1</span> Data Sources</summary>
+                <div class="content">
+                    <div class="section-desc">
+                        This is where all your data lives originally — your apps, websites, sensors, and files. Think of these as the "raw ingredients" before cooking.
+                    </div>
+                    
+                    <details class="sub-details">
+                        <summary>Transactional Databases (OLTP)</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Databases that store day-to-day business data — every order, user signup, or payment.</div>
+                            <div class="tool-list">
+                                <span class="tool">MySQL</span>
+                                <span class="tool">PostgreSQL</span>
+                                <span class="tool">SQL Server</span>
+                                <span class="tool">Oracle</span>
+                                <span class="tool">MongoDB</span>
+                            </div>
+                            <div class="analogy">Like a cash register that records every sale as it happens.</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>Enterprise Applications</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Big software systems that large companies use to run their entire business.</div>
+                            <div class="tool-list">
+                                <span class="tool">SAP</span>
+                                <span class="tool">Oracle ERP</span>
+                                <span class="tool">Salesforce</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>SAP</strong> — Manages everything: inventory, HR, finance, manufacturing<br>
+                                <strong>Oracle ERP</strong> — Similar to SAP, handles company operations<br>
+                                <strong>Salesforce</strong> — Tracks customers, sales, and deals
+                            </div>
+                            <div class="analogy">Like the brain of a company — knows about employees, products, customers, and money.</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>SaaS Applications</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Online tools that companies subscribe to for specific tasks.</div>
+                            <div class="tool-list">
+                                <span class="tool">HubSpot</span>
+                                <span class="tool">Stripe</span>
+                                <span class="tool">Shopify</span>
+                                <span class="tool">Zendesk</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>HubSpot</strong> — Marketing emails, lead tracking<br>
+                                <strong>Stripe</strong> — Online payments<br>
+                                <strong>Shopify</strong> — Online store platform<br>
+                                <strong>Zendesk</strong> — Customer support tickets
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>Files & Logs</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Plain files sitting on computers or shared drives.</div>
+                            <div class="tool-list">
+                                <span class="tool">CSV</span>
+                                <span class="tool">Excel</span>
+                                <span class="tool">JSON</span>
+                                <span class="tool">XML</span>
+                                <span class="tool">Server Logs</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>CSV/Excel</strong> — Spreadsheet data<br>
+                                <strong>JSON/XML</strong> — Structured text files used by apps<br>
+                                <strong>Server Logs</strong> — Records of what happened on a website or app
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>APIs</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Ways for apps to share data with each other automatically.</div>
+                            <div class="tool-list">
+                                <span class="tool">REST APIs</span>
+                                <span class="tool">Webhooks</span>
+                                <span class="tool">GraphQL</span>
+                            </div>
+                            <div class="analogy">Like a waiter taking orders between the kitchen (data) and customers (apps).</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>Events & Clickstream</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Tracks what users do on websites and apps — every click, scroll, and button press.</div>
+                            <div class="tool-list">
+                                <span class="tool">Segment</span>
+                                <span class="tool">Mixpanel</span>
+                                <span class="tool">Google Analytics</span>
+                            </div>
+                            <div class="analogy">Like security cameras recording every movement of shoppers in a store.</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>IoT & Sensors</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Data from physical devices — machines, vehicles, wearables.</div>
+                            <div class="tool-list">
+                                <span class="tool">Machine Sensors</span>
+                                <span class="tool">GPS Data</span>
+                                <span class="tool">Smart Devices</span>
+                            </div>
+                            <div class="analogy">Like a fitness watch tracking your heartbeat and steps.</div>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- 2. Data Ingestion -->
+            <details>
+                <summary><span class="section-number">2</span> Data Ingestion</summary>
+                <div class="content">
+                    <div class="section-desc">
+                        Moving data from sources into a central place. Like collecting ingredients from different shops and bringing them to your kitchen.
+                    </div>
+                    
+                    <details class="sub-details">
+                        <summary>Batch Ingestion (EL in ELT)</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Copies data in chunks at scheduled times — every hour, daily, etc.</div>
+                            <div class="tool-list">
+                                <span class="tool highlight">Fivetran</span>
+                                <span class="tool highlight">Airbyte</span>
+                                <span class="tool">Stitch</span>
+                                <span class="tool">Hevo</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Fivetran</strong> — Paid, very easy, 300+ connectors ready to use<br>
+                                <strong>Airbyte</strong> — Free/open source alternative to Fivetran<br>
+                                <strong>Stitch</strong> — Simpler, good for small teams<br>
+                                <strong>Hevo</strong> — Popular in India, no coding needed
+                            </div>
+                            <div class="analogy">Like a delivery truck that picks up goods from suppliers every morning.</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>Streaming Ingestion</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Moves data instantly as it happens — no waiting.</div>
+                            <div class="tool-list">
+                                <span class="tool highlight">Apache Kafka</span>
+                                <span class="tool highlight">Confluent</span>
+                                <span class="tool">AWS Kinesis</span>
+                                <span class="tool">Azure Event Hubs</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Kafka</strong> — Open source, industry standard for streaming<br>
+                                <strong>Confluent</strong> — Kafka but managed (easier to use)<br>
+                                <strong>Kinesis</strong> — AWS's streaming service<br>
+                                <strong>Event Hubs</strong> — Azure's streaming service
+                            </div>
+                            <div class="analogy">Like a live TV broadcast — data flows continuously in real-time.</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>Change Data Capture (CDC)</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Only captures what changed — new, updated, or deleted records. Efficient for large databases.</div>
+                            <div class="tool-list">
+                                <span class="tool">Debezium</span>
+                                <span class="tool">Fivetran CDC</span>
+                                <span class="tool">AWS DMS</span>
+                            </div>
+                            <div class="analogy">Like tracking only the edits made to a document, not copying the whole thing every time.</div>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- 3. Data Storage -->
+            <details>
+                <summary><span class="section-number">3</span> Data Storage</summary>
+                <div class="content">
+                    <div class="section-desc">
+                        Where you keep all your collected data. Like a warehouse or refrigerator where ingredients are stored before cooking.
+                    </div>
+                    
+                    <details class="sub-details">
+                        <summary>Cloud Object Storage (Data Lakes)</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Cheap storage for massive amounts of raw data — files, images, logs, anything.</div>
+                            <div class="tool-list">
+                                <span class="tool">AWS S3</span>
+                                <span class="tool">Google Cloud Storage</span>
+                                <span class="tool">Azure Blob Storage</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>S3</strong> — Amazon's storage, most popular<br>
+                                <strong>GCS</strong> — Google's equivalent<br>
+                                <strong>Blob</strong> — Microsoft Azure's storage
+                            </div>
+                            <div class="analogy">Like a massive storage unit — dump everything here, sort it later.</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>File Formats</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">How data is packaged and stored. Some formats are faster to read, some save more space.</div>
+                            <div class="tool-list">
+                                <span class="tool highlight">Parquet</span>
+                                <span class="tool">Avro</span>
+                                <span class="tool">ORC</span>
+                                <span class="tool">Delta</span>
+                                <span class="tool">Iceberg</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Parquet</strong> — Most popular for analytics, compressed, fast<br>
+                                <strong>Avro</strong> — Good for streaming data<br>
+                                <strong>Delta/Iceberg</strong> — Modern formats that add database-like features to files
+                            </div>
+                            <div class="analogy">Like choosing between a ZIP file or a folder — same content, different packaging.</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>Data Warehouses</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Organized storage built for fast analysis. Data is cleaned and structured here.</div>
+                            <div class="tool-list">
+                                <span class="tool">AWS → Redshift</span>
+                                <span class="tool">GCP → BigQuery</span>
+                                <span class="tool">Azure → Synapse</span>
+                                <span class="tool highlight">Snowflake</span>
+                                <span class="tool highlight">Databricks</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Redshift</strong> — Amazon's warehouse<br>
+                                <strong>BigQuery</strong> — Google's warehouse (you've used this!)<br>
+                                <strong>Synapse</strong> — Microsoft's warehouse<br>
+                                <strong>Snowflake</strong> — Works on any cloud, very popular<br>
+                                <strong>Databricks</strong> — Lakehouse (warehouse + lake combined)
+                            </div>
+                            <div class="analogy">Like an organized library — books are sorted and easy to find quickly.</div>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- 4. Data Transformation -->
+            <details>
+                <summary><span class="section-number">4</span> Data Transformation</summary>
+                <div class="content">
+                    <div class="section-desc">
+                        Cleaning and reshaping raw data into useful formats. Like cooking raw ingredients into a proper meal.
+                    </div>
+                    
+                    <details class="sub-details">
+                        <summary>ELT (Modern - in-warehouse)</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Transform data inside the warehouse using SQL. The modern, preferred approach.</div>
+                            <div class="tool-list">
+                                <span class="tool highlight">dbt</span>
+                                <span class="tool">Dataform (BigQuery)</span>
+                                <span class="tool">Coalesce (Snowflake)</span>
+                                <span class="tool">SQLMesh</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>dbt</strong> — Industry standard, works everywhere, free<br>
+                                <strong>Dataform</strong> — Google's tool, built into BigQuery<br>
+                                <strong>Coalesce</strong> — Visual tool for Snowflake<br>
+                                <strong>SQLMesh</strong> — Newer alternative to dbt
+                            </div>
+                            <div class="analogy">Like cooking inside the restaurant kitchen (warehouse) itself.</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>ETL (Traditional - outside warehouse)</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Transform data before loading into warehouse. Older approach, still used in big companies.</div>
+                            <div class="tool-list">
+                                <span class="tool">Informatica</span>
+                                <span class="tool">Talend</span>
+                                <span class="tool">SSIS</span>
+                                <span class="tool">DataStage</span>
+                                <span class="tool">Pentaho</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Informatica</strong> — Enterprise giant, expensive but powerful<br>
+                                <strong>Talend</strong> — Has free open-source version<br>
+                                <strong>SSIS</strong> — Microsoft's tool for SQL Server<br>
+                                <strong>DataStage</strong> — IBM's enterprise tool
+                            </div>
+                            <div class="analogy">Like preparing food at a central kitchen, then delivering to restaurants.</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>Streaming Transformation</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Transform data as it flows in real-time — no waiting for batches.</div>
+                            <div class="tool-list">
+                                <span class="tool highlight">Apache Flink</span>
+                                <span class="tool">Spark Streaming</span>
+                                <span class="tool">ksqlDB</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Flink</strong> — Powerful real-time processing<br>
+                                <strong>Spark Streaming</strong> — Part of Spark, handles batch + stream<br>
+                                <strong>ksqlDB</strong> — SQL on top of Kafka streams
+                            </div>
+                            <div class="analogy">Like a sushi chef preparing food as customers order — instant.</div>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- 5. Query Engines -->
+            <details>
+                <summary><span class="section-number">5</span> Query Engines</summary>
+                <div class="content">
+                    <div class="section-desc">
+                        Tools that let you run SQL queries directly on data lakes (files) without loading into a warehouse first. Useful for quick exploration.
+                    </div>
+                    <div class="tool-list">
+                        <span class="tool">Presto</span>
+                        <span class="tool">Trino</span>
+                        <span class="tool">AWS Athena</span>
+                        <span class="tool">Dremio</span>
+                    </div>
+                    <div class="tool-desc">
+                        <strong>Presto/Trino</strong> — Open source, query any data source<br>
+                        <strong>Athena</strong> — AWS service, query S3 files with SQL<br>
+                        <strong>Dremio</strong> — Fast queries on data lakes
+                    </div>
+                    <div class="analogy">Like reading a book in the storage room instead of bringing it to your desk first.</div>
+                </div>
+            </details>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- 6. Orchestration -->
+            <details>
+                <summary><span class="section-number">6</span> Orchestration</summary>
+                <div class="content">
+                    <div class="section-desc">
+                        Scheduling and managing workflows — making sure tasks run in the right order at the right time. The "project manager" of data pipelines.
+                    </div>
+                    <div class="tool-list">
+                        <span class="tool highlight">Apache Airflow</span>
+                        <span class="tool">Prefect</span>
+                        <span class="tool">Dagster</span>
+                        <span class="tool">AWS Step Functions</span>
+                        <span class="tool">Azure Data Factory</span>
+                        <span class="tool">Cloud Composer</span>
+                    </div>
+                    <div class="tool-desc">
+                        <strong>Airflow</strong> — Industry standard, open source, most popular<br>
+                        <strong>Prefect</strong> — Modern alternative, easier to use<br>
+                        <strong>Dagster</strong> — Focused on data assets<br>
+                        <strong>Cloud Composer</strong> — Google's managed Airflow
+                    </div>
+                    <div class="analogy">Like an alarm clock + calendar that automatically triggers tasks: "At 6 AM, run pipeline A, then B, then C."</div>
+                </div>
+            </details>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- 7. Data Quality -->
+            <details>
+                <summary><span class="section-number">7</span> Data Quality & Testing</summary>
+                <div class="content">
+                    <div class="section-desc">
+                        Checking if data is correct, complete, and trustworthy. Catches problems before they reach dashboards and reports.
+                    </div>
+                    <div class="tool-list">
+                        <span class="tool highlight">Great Expectations</span>
+                        <span class="tool">dbt tests</span>
+                        <span class="tool">Soda</span>
+                        <span class="tool">Monte Carlo</span>
+                        <span class="tool">Bigeye</span>
+                    </div>
+                    <div class="tool-desc">
+                        <strong>Great Expectations</strong> — Open source, write rules for data validation<br>
+                        <strong>dbt tests</strong> — Built into dbt, simple checks<br>
+                        <strong>Soda</strong> — Easy data monitoring<br>
+                        <strong>Monte Carlo</strong> — Detects data issues automatically
+                    </div>
+                    <div class="analogy">Like quality control in a factory — checking products before shipping them out.</div>
+                </div>
+            </details>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- 8. Data Catalog -->
+            <details>
+                <summary><span class="section-number">8</span> Data Catalog & Governance</summary>
+                <div class="content">
+                    <div class="section-desc">
+                        Helps people find and understand data. "What tables exist? What does this column mean? Who owns this data?"
+                    </div>
+                    
+                    <details class="sub-details">
+                        <summary>Open Source</summary>
+                        <div class="sub-content">
+                            <div class="tool-list">
+                                <span class="tool">DataHub</span>
+                                <span class="tool">Amundsen</span>
+                                <span class="tool">Apache Atlas</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>DataHub</strong> — LinkedIn's tool, very popular<br>
+                                <strong>Amundsen</strong> — Built by Lyft<br>
+                                <strong>Atlas</strong> — Apache's governance tool
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>Commercial</summary>
+                        <div class="sub-content">
+                            <div class="tool-list">
+                                <span class="tool">Alation</span>
+                                <span class="tool">Collibra</span>
+                                <span class="tool">Atlan</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Alation</strong> — Enterprise catalog, AI-powered<br>
+                                <strong>Collibra</strong> — Big on governance and compliance<br>
+                                <strong>Atlan</strong> — Modern, collaborative workspace
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <div class="analogy">Like a library catalog — tells you what books exist, where to find them, and what they're about.</div>
+                </div>
+            </details>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- 9. BI & Visualization -->
+            <details>
+                <summary><span class="section-number">9</span> BI & Visualization</summary>
+                <div class="content">
+                    <div class="section-desc">
+                        Tools that turn data into charts, dashboards, and reports. This is what business users actually see and use.
+                    </div>
+                    
+                    <details class="sub-details">
+                        <summary>Enterprise</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Powerful tools used by large companies. Usually expensive.</div>
+                            <div class="tool-list">
+                                <span class="tool highlight">Tableau</span>
+                                <span class="tool highlight">Power BI</span>
+                                <span class="tool">Looker</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Tableau</strong> — Beautiful visuals, drag-and-drop, owned by Salesforce<br>
+                                <strong>Power BI</strong> — Microsoft's tool, great with Excel<br>
+                                <strong>Looker</strong> — Google's BI tool, code-based modeling
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>Open Source / Lightweight</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Free or cheap alternatives. Good for startups and small teams.</div>
+                            <div class="tool-list">
+                                <span class="tool">Metabase</span>
+                                <span class="tool">Apache Superset</span>
+                                <span class="tool">Redash</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Metabase</strong> — Super easy, no SQL needed<br>
+                                <strong>Superset</strong> — Airbnb's tool, powerful and free<br>
+                                <strong>Redash</strong> — Simple SQL-based dashboards
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <div class="analogy">Like the final dish presentation — making data look appetizing for business people.</div>
+                </div>
+            </details>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- 10. DevOps -->
+            <details>
+                <summary><span class="section-number">10</span> DevOps & Infrastructure</summary>
+                <div class="content">
+                    <div class="section-desc">
+                        Tools that help deploy, manage, and version your code and infrastructure. The foundation that keeps everything running.
+                    </div>
+                    
+                    <details class="sub-details">
+                        <summary>Containerization</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Package your code with everything it needs to run anywhere.</div>
+                            <div class="tool-list">
+                                <span class="tool highlight">Docker</span>
+                                <span class="tool highlight">Kubernetes</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Docker</strong> — Creates containers (portable app packages)<br>
+                                <strong>Kubernetes</strong> — Manages many containers at scale
+                            </div>
+                            <div class="analogy">Like shipping containers — your stuff stays safe and works the same everywhere.</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>Version Control</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Track changes to code. Collaborate without overwriting each other's work.</div>
+                            <div class="tool-list">
+                                <span class="tool highlight">Git</span>
+                                <span class="tool">GitHub</span>
+                                <span class="tool">GitLab</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Git</strong> — The system that tracks changes<br>
+                                <strong>GitHub</strong> — Website to store and share Git code<br>
+                                <strong>GitLab</strong> — Alternative to GitHub with more built-in tools
+                            </div>
+                            <div class="analogy">Like "Track Changes" in Word, but for code — see who changed what and when.</div>
+                        </div>
+                    </details>
+                    
+                    <details class="sub-details">
+                        <summary>Infrastructure as Code</summary>
+                        <div class="sub-content">
+                            <div class="sub-desc">Define your servers, databases, and cloud resources in code files instead of clicking buttons.</div>
+                            <div class="tool-list">
+                                <span class="tool">Terraform</span>
+                                <span class="tool">Pulumi</span>
+                            </div>
+                            <div class="tool-desc">
+                                <strong>Terraform</strong> — Most popular, works with all clouds<br>
+                                <strong>Pulumi</strong> — Use real programming languages
+                            </div>
+                            <div class="analogy">Like a blueprint for a building — anyone can recreate the same setup from the plan.</div>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+        </div>
+
+        <!-- ==================== TAB 2: COMPANY EXAMPLES ==================== -->
+        <div id="companies" class="tab-content">
+            
+            <p class="subtitle">See how different companies build their data pipelines based on their size and needs.</p>
+
+            <!-- SMALL COMPANY -->
+            <details class="company-section small">
+                <summary>
+                    <span class="company-icon">🚀</span>
+                    <div class="company-info">
+                        <div class="company-title">Small Company / Startup</div>
+                        <div class="company-subtitle">5-50 employees • Limited budget • Speed over perfection</div>
+                    </div>
+                </summary>
+                <div class="company-content">
+                    <div class="company-desc">
+                        <strong>Philosophy:</strong> Keep it simple. Use managed services to avoid hiring a big data team. 
+                        Focus on getting insights quickly rather than building complex infrastructure.
+                    </div>
+
+                    <div class="flow-diagram">
+                        <div class="flow-box">
+                            <div class="icon">🛒</div>
+                            <div class="label">Sources</div>
+                            <div class="tool-name">Shopify, Stripe</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">🚚</div>
+                            <div class="label">Ingestion</div>
+                            <div class="tool-name">Fivetran</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">🏭</div>
+                            <div class="label">Warehouse</div>
+                            <div class="tool-name">BigQuery</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">🔧</div>
+                            <div class="label">Transform</div>
+                            <div class="tool-name">dbt</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">📊</div>
+                            <div class="label">BI Tool</div>
+                            <div class="tool-name">Metabase</div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <div class="scenario-title">Example: Online T-Shirt Store</div>
+                        <p>
+                            A small e-commerce startup sells t-shirts via Shopify. They use <strong>Fivetran</strong> to automatically pull 
+                            Shopify orders and Stripe payments into <strong>BigQuery</strong> every hour. A single data analyst uses 
+                            <strong>dbt</strong> to create clean tables for revenue, customers, and inventory. The CEO views a 
+                            <strong>Metabase</strong> dashboard each morning showing yesterday's sales.
+                        </p>
+                    </div>
+
+                    <details class="stack-details">
+                        <summary>📦 Full Stack List</summary>
+                        <div class="stack-list">
+                            <div class="stack-item">
+                                <span class="step-num">1</span>
+                                <div class="step-info">
+                                    <div class="step-label">Data Sources</div>
+                                    <div class="step-tool">Shopify, Stripe, PostgreSQL</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">2</span>
+                                <div class="step-info">
+                                    <div class="step-label">Extract & Load</div>
+                                    <div class="step-tool">Fivetran or Airbyte</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">3</span>
+                                <div class="step-info">
+                                    <div class="step-label">Warehouse</div>
+                                    <div class="step-tool">BigQuery or Snowflake</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">4</span>
+                                <div class="step-info">
+                                    <div class="step-label">Transform</div>
+                                    <div class="step-tool">dbt (free)</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">5</span>
+                                <div class="step-info">
+                                    <div class="step-label">Visualization</div>
+                                    <div class="step-tool">Metabase (free)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <!-- MID-SIZE COMPANY -->
+            <details class="company-section mid">
+                <summary>
+                    <span class="company-icon">🏢</span>
+                    <div class="company-info">
+                        <div class="company-title">Mid-Size Company</div>
+                        <div class="company-subtitle">50-500 employees • Dedicated data team • Growing complexity</div>
+                    </div>
+                </summary>
+                <div class="company-content">
+                    <div class="company-desc">
+                        <strong>Philosophy:</strong> Balance between simplicity and robustness. Add orchestration to manage 
+                        multiple pipelines. Start monitoring data quality. Need proper scheduling and alerts.
+                    </div>
+
+                    <div class="flow-diagram">
+                        <div class="flow-box">
+                            <div class="icon">🏪</div>
+                            <div class="label">Sources</div>
+                            <div class="tool-name">Salesforce, MySQL</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">🚚</div>
+                            <div class="label">Ingestion</div>
+                            <div class="tool-name">Fivetran + Kafka</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">🗄️</div>
+                            <div class="label">Storage</div>
+                            <div class="tool-name">S3 + Snowflake</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">🔧</div>
+                            <div class="label">Transform</div>
+                            <div class="tool-name">dbt + Airflow</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">✅</div>
+                            <div class="label">Quality</div>
+                            <div class="tool-name">Great Expectations</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">📈</div>
+                            <div class="label">BI</div>
+                            <div class="tool-name">Tableau</div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <div class="scenario-title">Example: B2B SaaS Company</div>
+                        <p>
+                            A SaaS company with 200 employees tracks customers in <strong>Salesforce</strong>, marketing in <strong>HubSpot</strong>, 
+                            and product usage in their own <strong>MySQL</strong> database. <strong>Fivetran</strong> syncs these to <strong>Snowflake</strong>. 
+                            Real-time product events flow through <strong>Kafka</strong>. <strong>Airflow</strong> runs dbt models every morning at 6 AM. 
+                            <strong>Great Expectations</strong> checks if revenue numbers look correct. Sales team uses <strong>Tableau</strong> dashboards 
+                            to track pipeline and churn.
+                        </p>
+                    </div>
+
+                    <details class="stack-details">
+                        <summary>📦 Full Stack List</summary>
+                        <div class="stack-list">
+                            <div class="stack-item">
+                                <span class="step-num">1</span>
+                                <div class="step-info">
+                                    <div class="step-label">Data Sources</div>
+                                    <div class="step-tool">Salesforce, HubSpot, MySQL</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">2</span>
+                                <div class="step-info">
+                                    <div class="step-label">Batch Ingestion</div>
+                                    <div class="step-tool">Fivetran</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">3</span>
+                                <div class="step-info">
+                                    <div class="step-label">Streaming</div>
+                                    <div class="step-tool">Apache Kafka</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">4</span>
+                                <div class="step-info">
+                                    <div class="step-label">Data Lake</div>
+                                    <div class="step-tool">AWS S3 (Parquet)</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">5</span>
+                                <div class="step-info">
+                                    <div class="step-label">Warehouse</div>
+                                    <div class="step-tool">Snowflake</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">6</span>
+                                <div class="step-info">
+                                    <div class="step-label">Orchestration</div>
+                                    <div class="step-tool">Apache Airflow</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">7</span>
+                                <div class="step-info">
+                                    <div class="step-label">Transform</div>
+                                    <div class="step-tool">dbt</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">8</span>
+                                <div class="step-info">
+                                    <div class="step-label">Data Quality</div>
+                                    <div class="step-tool">Great Expectations</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">9</span>
+                                <div class="step-info">
+                                    <div class="step-label">Visualization</div>
+                                    <div class="step-tool">Tableau / Power BI</div>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <!-- LARGE ENTERPRISE -->
+            <details class="company-section large">
+                <summary>
+                    <span class="company-icon">🏛️</span>
+                    <div class="company-info">
+                        <div class="company-title">Large Enterprise</div>
+                        <div class="company-subtitle">500+ employees • Multiple data teams • Complex requirements</div>
+                    </div>
+                </summary>
+                <div class="company-content">
+                    <div class="company-desc">
+                        <strong>Philosophy:</strong> Enterprise-grade reliability, security, and governance. Multiple pipelines 
+                        for different use cases. Legacy systems mixed with modern tools. Need data catalog so people can find data.
+                        Compliance and audit trails are critical.
+                    </div>
+
+                    <div class="flow-diagram">
+                        <div class="flow-box">
+                            <div class="icon">🏭</div>
+                            <div class="label">Sources</div>
+                            <div class="tool-name">SAP, Oracle, IoT</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">🔄</div>
+                            <div class="label">CDC</div>
+                            <div class="tool-name">Debezium</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">🌊</div>
+                            <div class="label">Streaming</div>
+                            <div class="tool-name">Confluent</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">🗃️</div>
+                            <div class="label">Lake</div>
+                            <div class="tool-name">S3 + Delta</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">🏢</div>
+                            <div class="label">Lakehouse</div>
+                            <div class="tool-name">Databricks</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">🔧</div>
+                            <div class="label">Transform</div>
+                            <div class="tool-name">dbt + Informatica</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">📚</div>
+                            <div class="label">Catalog</div>
+                            <div class="tool-name">DataHub</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box">
+                            <div class="icon">📊</div>
+                            <div class="label">BI</div>
+                            <div class="tool-name">Multiple</div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <div class="scenario-title">Example: Global Manufacturing Company</div>
+                        <p>
+                            A manufacturing giant with 10,000 employees runs <strong>SAP</strong> for inventory and finance, 
+                            <strong>Salesforce</strong> for sales, and collects <strong>IoT sensor data</strong> from factory machines. 
+                            <strong>Debezium</strong> captures every database change in real-time. <strong>Confluent Kafka</strong> streams 
+                            millions of events per second. Raw data lands in <strong>S3</strong> as Delta Lake tables. 
+                            <strong>Databricks</strong> processes both batch and streaming data. Legacy <strong>Informatica</strong> jobs 
+                            still run alongside modern <strong>dbt</strong> models. <strong>DataHub</strong> catalogs 5,000+ tables so analysts 
+                            can find what they need. Finance uses <strong>Power BI</strong>, sales uses <strong>Tableau</strong>, and 
+                            executives use <strong>Looker</strong> dashboards.
+                        </p>
+                    </div>
+
+                    <details class="stack-details">
+                        <summary>📦 Full Stack List</summary>
+                        <div class="stack-list">
+                            <div class="stack-item">
+                                <span class="step-num">1</span>
+                                <div class="step-info">
+                                    <div class="step-label">Enterprise Sources</div>
+                                    <div class="step-tool">SAP, Oracle ERP, Salesforce</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">2</span>
+                                <div class="step-info">
+                                    <div class="step-label">Real-time Sources</div>
+                                    <div class="step-tool">IoT Sensors, APIs, Logs</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">3</span>
+                                <div class="step-info">
+                                    <div class="step-label">CDC</div>
+                                    <div class="step-tool">Debezium</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">4</span>
+                                <div class="step-info">
+                                    <div class="step-label">Streaming</div>
+                                    <div class="step-tool">Confluent Kafka</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">5</span>
+                                <div class="step-info">
+                                    <div class="step-label">Data Lake</div>
+                                    <div class="step-tool">S3 + Delta Lake</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">6</span>
+                                <div class="step-info">
+                                    <div class="step-label">Lakehouse</div>
+                                    <div class="step-tool">Databricks</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">7</span>
+                                <div class="step-info">
+                                    <div class="step-label">Orchestration</div>
+                                    <div class="step-tool">Airflow + Dagster</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">8</span>
+                                <div class="step-info">
+                                    <div class="step-label">Modern Transform</div>
+                                    <div class="step-tool">dbt</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">9</span>
+                                <div class="step-info">
+                                    <div class="step-label">Legacy Transform</div>
+                                    <div class="step-tool">Informatica</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">10</span>
+                                <div class="step-info">
+                                    <div class="step-label">Data Quality</div>
+                                    <div class="step-tool">Monte Carlo</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">11</span>
+                                <div class="step-info">
+                                    <div class="step-label">Data Catalog</div>
+                                    <div class="step-tool">DataHub / Alation</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num">12</span>
+                                <div class="step-info">
+                                    <div class="step-label">BI Tools</div>
+                                    <div class="step-tool">Tableau, Power BI, Looker</div>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <!-- COMPARISON TABLE -->
+            <details class="comparison-details">
+                <summary>📊 Quick Comparison Table</summary>
+                <div class="content">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th><span class="badge green">Small</span></th>
+                                <th><span class="badge blue">Mid-Size</span></th>
+                                <th><span class="badge purple">Enterprise</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Team Size</strong></td>
+                                <td>1-2 data people</td>
+                                <td>5-15 data team</td>
+                                <td>50+ across teams</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Data Volume</strong></td>
+                                <td>GBs</td>
+                                <td>TBs</td>
+                                <td>PBs (Petabytes)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Budget</strong></td>
+                                <td>$500-5K/month</td>
+                                <td>$10K-100K/month</td>
+                                <td>$500K+/month</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Orchestration</strong></td>
+                                <td>Manual / cron</td>
+                                <td>Airflow / Prefect</td>
+                                <td>Multiple orchestrators</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Streaming</strong></td>
+                                <td>Usually not needed</td>
+                                <td>Some use cases</td>
+                                <td>Critical for real-time</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Data Catalog</strong></td>
+                                <td>Spreadsheet / Notion</td>
+                                <td>Basic catalog</td>
+                                <td>Enterprise catalog</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Governance</strong></td>
+                                <td>Minimal</td>
+                                <td>Basic access controls</td>
+                                <td>Full compliance</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Transform</strong></td>
+                                <td>dbt only</td>
+                                <td>dbt + Python</td>
+                                <td>dbt + Legacy ETL + Spark</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Theme cycling
+        const themes = ['', 'blue', 'purple', 'green', 'orange', 'rose', 'pink'];
+        let currentTheme = 0;
+
+        function cycleTheme() {
+            currentTheme = (currentTheme + 1) % themes.length;
+            if (themes[currentTheme] === '') {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', themes[currentTheme]);
+            }
+        }
+
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.closest('.tab-btn').classList.add('active');
+        }
+    </script>
+</body>
+</html>

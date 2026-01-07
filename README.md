@@ -1,4 +1,4 @@
-# My Understanding of Data Engineering
+# My Understanding of How Data Flows
 
 > This is a personal reference guide I created while learning about data engineering concepts, tools, and architectures. It reflects my understanding of how modern data pipelines work and how different companies approach data infrastructure based on their size and needs.
 >

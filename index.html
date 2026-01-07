@@ -1625,6 +1625,140 @@
                 </div>
             </details>
 
+            <!-- MY PROJECTS -->
+            <h2 style="color: var(--primary); margin-top: 30px; margin-bottom: 15px; font-size: 1.3rem;">🚀 My Projects</h2>
+            <p class="subtitle" style="text-align: left; margin-bottom: 20px;">Real projects I built to practice data engineering concepts.</p>
+
+            <details class="company-section" style="border-left: 4px solid #22c55e;">
+                <summary>
+                    <span class="company-icon">🌾</span>
+                    <div class="company-info">
+                        <div class="company-title" style="color: #22c55e;">Crop Monitoring System</div>
+                        <div class="company-subtitle">Real-time IoT Pipeline • Kafka • Spark • Superset</div>
+                    </div>
+                </summary>
+                <div class="company-content">
+                    <div class="company-desc">
+                        A real-time IoT monitoring system for agricultural fields that collects sensor data and processes it through a distributed streaming architecture.
+                        <br><br>
+                        <a href="https://github.com/nageshwar8296-bit/Crop-Monitoring" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">📂 View on GitHub →</a>
+                    </div>
+
+                    <div class="flow-diagram">
+                        <div class="flow-box" style="border-color: #22c55e;">
+                            <div class="icon">📡</div>
+                            <div class="label">Sensors</div>
+                            <div class="tool-name">IoT Data</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box" style="border-color: #22c55e;">
+                            <div class="icon">✅</div>
+                            <div class="label">Validate</div>
+                            <div class="tool-name">Schema Registry</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box" style="border-color: #22c55e;">
+                            <div class="icon">🌊</div>
+                            <div class="label">Stream</div>
+                            <div class="tool-name">Kafka</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box" style="border-color: #22c55e;">
+                            <div class="icon">⚡</div>
+                            <div class="label">Process</div>
+                            <div class="tool-name">Spark</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box" style="border-color: #22c55e;">
+                            <div class="icon">🗄️</div>
+                            <div class="label">Store</div>
+                            <div class="tool-name">MinIO + PostgreSQL</div>
+                        </div>
+                        <span class="arrow-small">→</span>
+                        <div class="flow-box" style="border-color: #22c55e;">
+                            <div class="icon">📊</div>
+                            <div class="label">Visualize</div>
+                            <div class="tool-name">Superset</div>
+                        </div>
+                    </div>
+
+                    <div class="scenario">
+                        <div class="scenario-title">What it monitors</div>
+                        <p>
+                            Simulated IoT sensors produce readings every second for: <strong>Soil moisture</strong> (10-40%),
+                            <strong>Temperature</strong> (20-40°C), <strong>Humidity</strong> (40-90%), and
+                            <strong>Light intensity</strong> (200-800 lumens). Data flows through Kafka, gets validated by
+                            Schema Registry, processed by Spark in micro-batches, and stored in MinIO (data lake) and
+                            PostgreSQL (for dashboards). Superset visualizes the data while Prometheus + Grafana monitor pipeline health.
+                        </p>
+                    </div>
+
+                    <details class="stack-details">
+                        <summary>📦 Full Tech Stack</summary>
+                        <div class="stack-list">
+                            <div class="stack-item">
+                                <span class="step-num" style="background: #22c55e;">1</span>
+                                <div class="step-info">
+                                    <div class="step-label">Data Source</div>
+                                    <div class="step-tool">IoT Sensors (Simulated)</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num" style="background: #22c55e;">2</span>
+                                <div class="step-info">
+                                    <div class="step-label">Schema Validation</div>
+                                    <div class="step-tool">Confluent Schema Registry</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num" style="background: #22c55e;">3</span>
+                                <div class="step-info">
+                                    <div class="step-label">Message Streaming</div>
+                                    <div class="step-tool">Apache Kafka</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num" style="background: #22c55e;">4</span>
+                                <div class="step-info">
+                                    <div class="step-label">Stream Processing</div>
+                                    <div class="step-tool">Apache Spark</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num" style="background: #22c55e;">5</span>
+                                <div class="step-info">
+                                    <div class="step-label">Data Lake</div>
+                                    <div class="step-tool">MinIO (S3-compatible)</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num" style="background: #22c55e;">6</span>
+                                <div class="step-info">
+                                    <div class="step-label">Data Warehouse</div>
+                                    <div class="step-tool">PostgreSQL</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num" style="background: #22c55e;">7</span>
+                                <div class="step-info">
+                                    <div class="step-label">Visualization</div>
+                                    <div class="step-tool">Apache Superset</div>
+                                </div>
+                            </div>
+                            <div class="stack-item">
+                                <span class="step-num" style="background: #22c55e;">8</span>
+                                <div class="step-info">
+                                    <div class="step-label">Monitoring</div>
+                                    <div class="step-tool">Prometheus + Grafana</div>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="analogy" style="margin-top: 15px;">This project demonstrates streaming ingestion, real-time processing, and the modern data stack in action.</div>
+                </div>
+            </details>
+
         </div>
 
     </div>

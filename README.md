@@ -598,6 +598,49 @@ A manufacturing giant with 10,000 employees runs **SAP** for inventory and finan
 
 ---
 
+## My Projects
+
+Real projects I built to practice data engineering concepts.
+
+<details>
+<summary><b>🌾 Crop Monitoring System</b> (Real-time IoT Pipeline)</summary>
+
+A real-time IoT monitoring system for agricultural fields that collects sensor data and processes it through a distributed streaming architecture.
+
+**[View on GitHub](https://github.com/nageshwar8296-bit/Crop-Monitoring)**
+
+### Pipeline Flow
+
+```
+IoT Sensors → Schema Registry → Kafka → Spark Streaming → MinIO/PostgreSQL → Superset
+```
+
+### What it does
+
+Simulated IoT sensors produce readings every second for:
+- Soil moisture (10-40%)
+- Temperature (20-40°C)
+- Humidity (40-90%)
+- Light intensity (200-800 lumens)
+
+### Tech Stack
+
+| Component | Tool |
+|-----------|------|
+| Message Streaming | Apache Kafka |
+| Schema Validation | Confluent Schema Registry |
+| Stream Processing | Apache Spark |
+| Data Lake | MinIO (S3-compatible) |
+| Data Warehouse | PostgreSQL |
+| Visualization | Apache Superset |
+| Monitoring | Prometheus + Grafana |
+
+> 💡 *This project demonstrates streaming ingestion, real-time processing, and the modern data stack in action.*
+
+</details>
+
+---
+
 ## Contributing
 
 Feel free to submit issues and pull requests to improve this guide!
